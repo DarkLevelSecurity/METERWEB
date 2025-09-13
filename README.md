@@ -1,35 +1,19 @@
 # METERWEB
 
-## Overview
-This will be a simple initial stager project.
+I have no energy to explain check the VISION.md.
 
 ## How it works
-**Stager**
-1. get the obfuscated (IPv4) payload from a web server.
-2. decode it (IPv4).
-3. Inject it to the firefox.exe process.
-4. self destroy.
-**payload**
-1. reverse shell to a msfconsole listner.
 
-## Tools
-- C -> main stager.exe
-- msfvenom -> the meterpreter shellcode generator
-- msfconsole -> listner
-- python3 -> for the `-m http.server`
-- HellShell -> for the IPv4 en/decoding functions
+- set up your kali or any linux that contains metasploit framework.
+- generate a windows/x64/shell_reverse payload in the raw format, don't forget to insert your machine IP and the intended port
+- run the exploit/multi/handler in msfconsole
+- run an HTTP server, `python3 -m http.server`
+- insert you url of the generated file and the intended process to inject the code to in the `meterweb.h` file
+- compile and run the code.
 
-## Lab
-```txt
- ______________
-| windows    *-------______> virtual network
-|      ________|     |
-|     |   *-----------
-|     | kali.vm|
-|_____|________|
-```
+## Targets
+I only tested it on windows 10 x64 to the notepad.exe and the code ran without being detected.
 
-## Journalying
-Well all the code works well except one part, *Process Injection*.
-
-My process injection code inject bytes but I need it to inject/load PE image, .EXE to be spicific
+## Disclaimer (i think)
+This for malware analysits and if you wanna do something illegal please fuck off and check the thousands of malware available there this is just a begineer project.0/[.,]
+> Don't use it the bad way
