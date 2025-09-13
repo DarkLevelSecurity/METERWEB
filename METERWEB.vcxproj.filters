@@ -14,4 +14,29 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="get_payload.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="decode.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="proc_inj.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="self_destroy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="meterweb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

