@@ -15,27 +15,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.c">
+    <ClCompile Include="src\decode.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="test.c">
+    <ClCompile Include="src\get_payload.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="get_payload.c">
+    <ClCompile Include="src\main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="decode.c">
+    <ClCompile Include="src\proc_inj.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="proc_inj.c">
+    <ClCompile Include="src\self_destroy.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="self_destroy.c">
+    <ClCompile Include="src\test.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="meterweb.h">
+    <ClInclude Include="headers\meterweb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
